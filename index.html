@@ -11,18 +11,50 @@
   <title>My project</title>
 </head>
 <body>
-  <div id="app">test
+  <div id="app">
+    <p>{{ counter }}</p>
+    <button @click="increment">Father button</button>
     <header>
       <h2>{{ sitename }}</h2>
     </header>
+    <section>
+      <!-- <my-component :text="message" @counter-plus="increment"/> -->
+      <my-component :text="message" :my-counter.sync="counter"/>
+    </section>
     <button type="button" class="btn btn-primary">Primary</button>
+    <!-- How works v-model under... -->
+          <input type="text" @input="some=$event.target.value"/>
+          <p v-text="some"></p>
   </div>
   <script type="text/javascript">
+  const Component = { 
+    template: '<div> {{ text }} {{ tester }} <button @click="counterPlus">Children button</button></div>', 
+    props: ['text', 'my-counter'],
+    data: () => ({
+      tester: 'tester_1',
+    }),
+    methods: {
+      counterPlus() {
+        this.$emit('update:myCounter', this.myCounter+=1);
+      },
+    },
+  };
   const webstore = new Vue({
     el: '#app',
+    components: {
+      'myComponent': Component,
+    },
     data: () => ({
-      sitename: 'Hero !!',
+      sitename: 'Hero !!222',
+      some: "some",
+      message: 'Message',
+      counter: 0,
     }),
+    methods: {
+      increment() {
+        this.counter+=1;
+      },
+    },
   });
   </script>
 </body>
