@@ -12,6 +12,12 @@
 </head>
 <body>
   <div id="app">
+    <form-component
+      :author="authorLabel"
+      :title="titleLabel"
+    >
+      <h5>{{ header }}</h5>
+    </form-component>
     <p>{{ counter }}</p>
     <button @click="increment">Father button</button>
     <header>
@@ -23,10 +29,14 @@
     </section>
     <button type="button" class="btn btn-primary">Primary</button>
     <!-- How works v-model under... -->
-          <input type="text" @input="some=$event.target.value"/>
-          <p v-text="some"></p>
+          <input type="text" @input="inputText=$event.target.value" :value="inputText"/>
+          <p v-text="inputText"></p>
   </div>
   <script type="text/javascript">
+  const FromComponent = {
+    template:'<div><form><slot></slot><label for="title">{{ title }}</label><input id="title" type="text" /><br /><label for="author">{{ author }}</label><input id="author" type="text" /><button>Submit</button></form></div>',
+    props:['title', 'author'],
+  };
   const Component = { 
     template: '<div> {{ text }} {{ tester }} <button @click="counterPlus">Children button</button></div>', 
     props: ['text', 'my-counter'],
@@ -43,12 +53,16 @@
     el: '#app',
     components: {
       'myComponent': Component,
+      'form-component': FromComponent,
     },
     data: () => ({
       sitename: 'Hero !!222',
-      some: "some",
+      inputText: "zzzrrrrrzz",
       message: 'Message',
       counter: 0,
+      titleLabel: 'The Title: ',
+      authorLabel: 'The Author:',
+      header: 'Book Author Form',
     }),
     methods: {
       increment() {
